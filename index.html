@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>GearHive | Useful Tech Accessories</title>
+  <meta name="description" content="GearHive finds practical gadgets that make everyday life easier—focused recommendations, concise and useful.">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="email-modal">
+    <div class="modal-card">
+      <button class="modal-close" aria-label="Close signup">×</button>
+      <h2>Get updates on useful gear</h2>
+      <p class="modal-copy">Be first to know when we find gadgets that make life easier. Occasional updates.</p>
+      <form class="email-form" action="/signup" method="post">
+        <label for="modal-email">Email</label>
+        <div class="email-row">
+          <input id="modal-email" name="email" type="email" placeholder="you@example.com" required>
+          <button type="submit">Join list</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <header class="navbar">
+    <div class="logo">
+      <img src="assets/gearhive-logo.png" alt="GearHive logo">
+      <span>GearHive</span>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="accessories.html">Accessories</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero home-hero" id="home">
+    <div class="hero-copy">
+      <h1>Simple Tech.<br>Smart Choices.</h1>
+      <p>GearHive highlights practical gadgets and accessories that make everyday life easier. Concise recommendations, no endless scrolling.</p>
+      <div class="hero-actions">
+        <a class="cta" href="accessories.html">Explore Accessories</a>
+        <a class="ghost" href="about.html">How We Choose</a>
+      </div>
+      <form class="email-form email-signup" action="/signup" method="post">
+        <label for="email">Get product updates and offers</label>
+        <div class="email-row">
+          <input id="email" name="email" type="email" placeholder="you@example.com" required>
+          <button type="submit">Send me updates</button>
+        </div>
+      </form>
+      <div class="hero-meta">
+        <div class="meta-card">
+          <span class="meta-label">Built for daily use</span>
+          <strong>Durable cables, efficient chargers, organized carry solutions.</strong>
+        </div>
+        <div class="meta-card">
+          <span class="meta-label">Decisions, fast</span>
+          <strong>Clear picks and criteria in under two minutes.</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 GearHive • <a href="contact.html">Contact</a></p>
+  </footer>
+
+  <script>
+    // Handle all email forms
+    const emailForms = document.querySelectorAll('.email-form');
+    emailForms.forEach((form) => {
+      const note = form.querySelector('.email-note');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const emailInput = form.email;
+        const email = emailInput.value.trim();
+        if (!email) return;
+        if (note) note.textContent = 'Submitting...';
+        try {
+          const res = await fetch('/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+          if (!res.ok) throw new Error('Failed');
+          if (note) note.textContent = 'Thanks! You are on the list.';
+          emailInput.value = '';
+        } catch (err) {
+          if (note) note.textContent = 'Something went wrong. Please try again.';
+        }
+      });
+    });
+
+    // Modal controls
+    const modal = document.querySelector('.email-modal');
+    const closeBtn = document.querySelector('.modal-close');
+    const STORAGE_KEY = 'gearhive_signup_seen';
+    // Use sessionStorage so the prompt returns on a new visit
+    const storage = (() => {
+      try { return window.sessionStorage; } catch (_) { return null; }
+    })();
+
+    const markSeen = () => {
+      try { storage?.setItem(STORAGE_KEY, '1'); } catch (_) {}
+    };
+
+    const closeModal = () => {
+      modal?.classList.remove('show');
+      document.body.classList.remove('modal-open');
+      markSeen();
+    };
+
+    if (modal && !storage?.getItem(STORAGE_KEY)) {
+      modal.classList.add('show');
+      document.body.classList.add('modal-open');
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+    }
+
+    closeBtn?.addEventListener('click', closeModal);
+
+    // Mark seen after a successful submit (for the modal form)
+    const modalForm = modal?.querySelector('form');
+    if (modalForm) {
+      modalForm.addEventListener('submit', () => markSeen());
+    }
+  </script>
+</body>
+</html>

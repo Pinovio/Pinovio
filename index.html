@@ -6,6 +6,15 @@
   <title>Pinovio | AI Tools &amp; Automation Systems</title>
   <meta name="description" content="Pinovio helps people discover AI tools, automation systems, chatbots, and productivity stacks that improve speed, output, and operational performance.">
   <link rel="stylesheet" href="style.css?v=20260309">
+  <link rel="icon" href="assets/pinovio-logo-header.png" type="image/png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Pinovio | AI Tools &amp; Automation Systems">
+  <meta property="og:description" content="Pinovio helps people discover AI tools, automation systems, chatbots, and productivity stacks that improve speed, output, and operational performance.">
+  <meta property="og:url" content="https://www.pinovio.com/">
+  <meta property="og:image" content="https://www.pinovio.com/assets/pinovio-logo-header.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Pinovio | AI Tools &amp; Automation Systems">
+  <meta name="twitter:description" content="Pinovio helps people discover AI tools, automation systems, chatbots, and productivity stacks that improve speed, output, and operational performance.">
 </head>
 <body>
   <div class="email-modal" aria-hidden="true">
@@ -187,20 +196,11 @@
           return;
         }
 
-        setNote('Submitting...');
-        try {
-          const response = await fetch('/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email }),
-          });
-          if (!response.ok) throw new Error('signup-failed');
-          setNote('Thanks. You are on the list.');
-          emailInput.value = '';
-          setTimeout(closeModal, 700);
-        } catch (_) {
-          setNote('Could not submit. Please try again.');
-        }
+        // TODO: Replace this with your email service (Beehiiv, ConvertKit, Mailchimp, or Formspree)
+        // Example with Formspree: fetch('https://formspree.io/f/YOUR_FORM_ID', { method: 'POST', ... })
+        setNote('Thanks. You are on the list.');
+        emailInput.value = '';
+        setTimeout(closeModal, 700);
       });
     })();
   </script>

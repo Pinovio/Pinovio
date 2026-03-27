@@ -625,6 +625,104 @@ input[type='reset'],
   margin-top: 14px;
 }
 
+/* ── Stat Bar ─────────────────────────────────────────── */
+.stat-bar {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(59, 130, 246, 0.18);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-number {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.76rem;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+/* ── Tool Cards ───────────────────────────────────────── */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tool-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tool-card-header h3 {
+  margin: 0;
+}
+
+.tool-best-for {
+  font-size: 0.9rem;
+  margin: 0;
+  color: var(--muted);
+}
+
+.tool-best-for strong {
+  color: var(--text);
+}
+
+.tool-card-footer {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.tool-card-footer .button {
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+/* ── Article Callout ──────────────────────────────────── */
+.callout {
+  background: rgba(59, 130, 246, 0.07);
+  border: 1px solid rgba(59, 130, 246, 0.22);
+  border-left: 3px solid var(--accent);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+
+.callout p {
+  margin: 0 !important;
+  color: var(--text) !important;
+  font-size: 0.97rem;
+}
+
+.callout strong {
+  color: var(--accent-strong) !important;
+}
+
 .site-footer {
   margin-top: 16px;
   border-top: 1px solid var(--line);

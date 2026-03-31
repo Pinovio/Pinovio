@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://gearhive.com/</loc>
+    <loc>https://pinovio.com/</loc>
   </url>
   <url>
-    <loc>https://gearhive.com/insights.html</loc>
+    <loc>https://pinovio.com/accessories.html</loc>
   </url>
   <url>
-    <loc>https://gearhive.com/accessories.html</loc>
+    <loc>https://pinovio.com/insights.html</loc>
   </url>
   <url>
-    <loc>https://gearhive.com/for-businesses.html</loc>
+    <loc>https://pinovio.com/for-businesses.html</loc>
   </url>
   <url>
-    <loc>https://gearhive.com/best-ai-tools-small-businesses-2026.html</loc>
+    <loc>https://pinovio.com/about.html</loc>
   </url>
   <url>
-    <loc>https://gearhive.com/best-free-ai-tools-2026.html</loc>
+    <loc>https://pinovio.com/contact.html</loc>
+  </url>
+  <url>
+    <loc>https://pinovio.com/best-ai-tools-productivity-2026.html</loc>
+  </url>
+  <url>
+    <loc>https://pinovio.com/best-ai-tools-small-businesses-2026.html</loc>
+  </url>
+  <url>
+    <loc>https://pinovio.com/best-free-ai-tools-2026.html</loc>
   </url>
 </urlset>

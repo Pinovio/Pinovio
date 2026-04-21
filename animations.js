@@ -1,10 +1,27 @@
 (function () {
   'use strict';
 
-  // Exit early for users who prefer reduced motion
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── 1. Background floating orbs ── */
+  /* ── 1. Scroll progress bar ── */
+
+  var progressBar = document.createElement('div');
+  progressBar.className = 'scroll-progress';
+  document.body.appendChild(progressBar);
+
+  if (!reducedMotion) {
+    window.addEventListener('scroll', function () {
+      var scrollTop = window.scrollY;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      var progress = docHeight > 0 ? scrollTop / docHeight : 0;
+      progressBar.style.transform = 'scaleX(' + progress + ')';
+    }, { passive: true });
+  }
+
+  /* Exit early for reduced-motion users (all other animations) */
+  if (reducedMotion) return;
+
+  /* ── 2. Background floating orbs ── */
 
   var orbWrapper = document.createElement('div');
   orbWrapper.className = 'bg-orbs';
@@ -37,7 +54,111 @@
 
   document.body.prepend(orbWrapper);
 
-  /* ── 2. Intersection Observer ── */
+  /* ── 3. Canvas particle network ── */
+
+  var netCanvas = document.createElement('canvas');
+  netCanvas.id = 'net-canvas';
+  netCanvas.setAttribute('aria-hidden', 'true');
+  document.body.prepend(netCanvas);
+
+  var netCtx = netCanvas.getContext('2d');
+  var netMouse = { x: null, y: null };
+  var netParticles = [];
+  var NET_COUNT = 70;
+  var NET_CONNECT = 150;
+  var NET_REPEL = 120;
+
+  function netResize() {
+    netCanvas.width  = window.innerWidth;
+    netCanvas.height = window.innerHeight;
+  }
+  netResize();
+  window.addEventListener('resize', function () {
+    netResize();
+    netParticles.forEach(function (p) {
+      p.x = Math.min(p.x, netCanvas.width);
+      p.y = Math.min(p.y, netCanvas.height);
+    });
+  }, { passive: true });
+
+  window.addEventListener('mousemove', function (e) {
+    netMouse.x = e.clientX;
+    netMouse.y = e.clientY;
+  }, { passive: true });
+
+  window.addEventListener('mouseleave', function () {
+    netMouse.x = null;
+    netMouse.y = null;
+  }, { passive: true });
+
+  for (var pi = 0; pi < NET_COUNT; pi++) {
+    netParticles.push({
+      x: Math.random() * netCanvas.width,
+      y: Math.random() * netCanvas.height,
+      vx: (Math.random() - 0.5) * 0.55,
+      vy: (Math.random() - 0.5) * 0.55,
+      r: Math.random() * 1.4 + 0.8
+    });
+  }
+
+  function drawNet() {
+    netCtx.clearRect(0, 0, netCanvas.width, netCanvas.height);
+
+    netParticles.forEach(function (p) {
+      if (netMouse.x !== null) {
+        var mdx = p.x - netMouse.x;
+        var mdy = p.y - netMouse.y;
+        var md  = Math.sqrt(mdx * mdx + mdy * mdy);
+        if (md < NET_REPEL && md > 0) {
+          var f = (NET_REPEL - md) / NET_REPEL;
+          p.vx += (mdx / md) * f * 0.5;
+          p.vy += (mdy / md) * f * 0.5;
+        }
+      }
+
+      p.vx *= 0.97;
+      p.vy *= 0.97;
+      p.vx = Math.max(-1.8, Math.min(1.8, p.vx));
+      p.vy = Math.max(-1.8, Math.min(1.8, p.vy));
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0) p.x = netCanvas.width;
+      if (p.x > netCanvas.width)  p.x = 0;
+      if (p.y < 0) p.y = netCanvas.height;
+      if (p.y > netCanvas.height) p.y = 0;
+    });
+
+    for (var i = 0; i < netParticles.length; i++) {
+      for (var j = i + 1; j < netParticles.length; j++) {
+        var cdx = netParticles[i].x - netParticles[j].x;
+        var cdy = netParticles[i].y - netParticles[j].y;
+        var cd  = Math.sqrt(cdx * cdx + cdy * cdy);
+        if (cd < NET_CONNECT) {
+          var alpha = (1 - cd / NET_CONNECT) * 0.28;
+          netCtx.strokeStyle = 'rgba(59,130,246,' + alpha + ')';
+          netCtx.lineWidth = 0.8;
+          netCtx.beginPath();
+          netCtx.moveTo(netParticles[i].x, netParticles[i].y);
+          netCtx.lineTo(netParticles[j].x, netParticles[j].y);
+          netCtx.stroke();
+        }
+      }
+    }
+
+    netParticles.forEach(function (p) {
+      netCtx.beginPath();
+      netCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      netCtx.fillStyle = 'rgba(96,165,250,0.6)';
+      netCtx.fill();
+    });
+
+    requestAnimationFrame(drawNet);
+  }
+
+  drawNet();
+
+  /* ── 5. Intersection Observer ── */
 
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
@@ -52,9 +173,9 @@
     if (el) observer.observe(el);
   }
 
-  /* ── 3. Add animation classes to DOM elements ── */
+  /* ── 6. Apply animation classes to DOM elements ── */
 
-  // Section h2 headers — fade up
+  // Section h2 headers — fade up + accent line
   document.querySelectorAll('.section h2').forEach(function (el) {
     el.classList.add('anim-ready');
     observe(el);
@@ -104,7 +225,7 @@
     });
   });
 
-  /* ── 4. Stat count-up ── */
+  /* ── 7. Stat count-up ── */
 
   function easeOut(t) {
     return 1 - Math.pow(1 - t, 3);
@@ -135,31 +256,23 @@
       var raw = el.textContent.trim();
       var suffix = '';
 
-      // Check for trailing +
       if (raw.endsWith('+')) {
         suffix = '+';
         raw = raw.slice(0, -1);
       }
 
       var num = parseInt(raw, 10);
-
-      // Only count-up pure integers — skip things like "April 2026" or "2026"
       if (isNaN(num)) return;
-      // Skip large year-like values (>= 1000) — not meant to animate
       if (num >= 1000) return;
 
-      var original = el.textContent;
       el.textContent = '0' + suffix;
 
-      // Small delay so the fade-in and count-up feel coordinated
       setTimeout(function () {
         animateCount(el, num, suffix, 1200);
       }, 300);
     });
   }
 
-  // Wire count-up to stat bars entering the viewport
-  // We need a separate observer for this since the general one fires anim-visible
   var countObserver = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (entry.isIntersecting) {
@@ -172,5 +285,43 @@
   document.querySelectorAll('.stat-bar').forEach(function (el) {
     countObserver.observe(el);
   });
+
+  /* ── 8. Modal close animation ── */
+
+  var modal = document.querySelector('.email-modal');
+  var closeBtn = document.querySelector('.modal-close');
+
+  if (modal && closeBtn) {
+    // Intercept close to play exit animation first
+    var originalClose = null;
+
+    function animatedClose() {
+      modal.classList.add('modal-closing');
+      modal.querySelector('.modal-card').addEventListener('animationend', function onEnd() {
+        modal.classList.remove('modal-closing');
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        modal.querySelector('.modal-card').removeEventListener('animationend', onEnd);
+      }, { once: true });
+    }
+
+    // Patch the close triggers to use animated close
+    document.querySelectorAll('.modal-close').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        if (modal.classList.contains('show')) {
+          e.stopImmediatePropagation();
+          animatedClose();
+        }
+      }, true); // capture phase to run before inline handler
+    });
+
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal && modal.classList.contains('show')) {
+        e.stopImmediatePropagation();
+        animatedClose();
+      }
+    }, true);
+  }
 
 })();

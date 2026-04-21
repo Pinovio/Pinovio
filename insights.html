@@ -15,6 +15,7 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Insights | Pinovio AI Systems Publication">
   <meta name="twitter:description" content="Published guides for people and teams using AI to improve workflows, reduce manual work, and make better tooling decisions.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <link rel="stylesheet" href="animations.css">
 </head>
 <body>
@@ -49,50 +50,66 @@
       <div class="container">
         <h2>Published Articles</h2>
         <p class="section-intro">The live guides are below. More are in progress, but only published articles are listed here.</p>
-        <div class="publication-grid">
-          <article class="card publication-card">
-            <p class="publication-meta">Published · April 15, 2026</p>
-            <h3><a href="best-ai-voice-generators-2026.html">8 Best AI Voice Generators in 2026</a></h3>
-            <p>A practical ranking of the best AI voice generators for voiceovers, narration, podcasts, and content creation. Covers ElevenLabs, Murf, LOVO, Play.ht, and more.</p>
-            <div class="tag-list" aria-label="Article categories">
-              <span class="tag">AI Voice</span>
-              <span class="tag">Content Creation</span>
-              <span class="tag">Published</span>
-            </div>
-          </article>
 
-          <article class="card publication-card">
-            <p class="publication-meta">Published · March 21, 2026</p>
-            <h3><a href="best-ai-tools-productivity-2026.html">10 Best AI Tools for Productivity in 2026</a></h3>
-            <p>A practical ranking of the AI tools that save the most time in daily work, from ChatGPT and Notion AI to Zapier, Motion, and Otter.</p>
-            <div class="tag-list" aria-label="Article categories">
-              <span class="tag">AI Productivity</span>
-              <span class="tag">Workflows</span>
-              <span class="tag">Published</span>
-            </div>
-          </article>
+        <div class="swiper publication-swiper">
+          <div class="swiper-wrapper">
 
-          <article class="card publication-card">
-            <p class="publication-meta">Published · March 9, 2026</p>
-            <h3><a href="best-ai-tools-small-businesses-2026.html">10 Best AI Tools for Small Businesses in 2026</a></h3>
-            <p>A practical ranking of the most useful AI tools for small businesses, with guidance by workflow, stack, and bottleneck.</p>
-            <div class="tag-list" aria-label="Article categories">
-              <span class="tag">AI Tools</span>
-              <span class="tag">Small Business</span>
-              <span class="tag">Published</span>
+            <div class="swiper-slide">
+              <article class="card publication-card">
+                <p class="publication-meta">Published · April 15, 2026</p>
+                <h3><a href="best-ai-voice-generators-2026.html">8 Best AI Voice Generators in 2026</a></h3>
+                <p>A practical ranking of the best AI voice generators for voiceovers, narration, podcasts, and content creation. Covers ElevenLabs, Murf, LOVO, Play.ht, and more.</p>
+                <div class="tag-list" aria-label="Article categories">
+                  <span class="tag">AI Voice</span>
+                  <span class="tag">Content Creation</span>
+                  <span class="tag">Published</span>
+                </div>
+              </article>
             </div>
-          </article>
 
-          <article class="card publication-card">
-            <p class="publication-meta">Published · March 9, 2026</p>
-            <h3><a href="best-free-ai-tools-2026.html">15 Best Free AI Tools in 2026</a></h3>
-            <p>A practical roundup of free AI tools for writing, research, design, coding, meetings, and everyday productivity.</p>
-            <div class="tag-list" aria-label="Article categories">
-              <span class="tag">Free AI Tools</span>
-              <span class="tag">Productivity</span>
-              <span class="tag">Published</span>
+            <div class="swiper-slide">
+              <article class="card publication-card">
+                <p class="publication-meta">Published · March 21, 2026</p>
+                <h3><a href="best-ai-tools-productivity-2026.html">10 Best AI Tools for Productivity in 2026</a></h3>
+                <p>A practical ranking of the AI tools that save the most time in daily work, from ChatGPT and Notion AI to Zapier, Motion, and Otter.</p>
+                <div class="tag-list" aria-label="Article categories">
+                  <span class="tag">AI Productivity</span>
+                  <span class="tag">Workflows</span>
+                  <span class="tag">Published</span>
+                </div>
+              </article>
             </div>
-          </article>
+
+            <div class="swiper-slide">
+              <article class="card publication-card">
+                <p class="publication-meta">Published · March 9, 2026</p>
+                <h3><a href="best-ai-tools-small-businesses-2026.html">10 Best AI Tools for Small Businesses in 2026</a></h3>
+                <p>A practical ranking of the most useful AI tools for small businesses, with guidance by workflow, stack, and bottleneck.</p>
+                <div class="tag-list" aria-label="Article categories">
+                  <span class="tag">AI Tools</span>
+                  <span class="tag">Small Business</span>
+                  <span class="tag">Published</span>
+                </div>
+              </article>
+            </div>
+
+            <div class="swiper-slide">
+              <article class="card publication-card">
+                <p class="publication-meta">Published · March 9, 2026</p>
+                <h3><a href="best-free-ai-tools-2026.html">15 Best Free AI Tools in 2026</a></h3>
+                <p>A practical roundup of free AI tools for writing, research, design, coding, meetings, and everyday productivity.</p>
+                <div class="tag-list" aria-label="Article categories">
+                  <span class="tag">Free AI Tools</span>
+                  <span class="tag">Productivity</span>
+                  <span class="tag">Published</span>
+                </div>
+              </article>
+            </div>
+
+          </div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
         </div>
       </div>
     </section>
@@ -108,6 +125,22 @@
       </div>
     </div>
   </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    new Swiper('.publication-swiper', {
+      slidesPerView: 1,
+      spaceBetween: 24,
+      loop: true,
+      autoplay: { delay: 4500, disableOnInteraction: false, pauseOnMouseEnter: true },
+      pagination: { el: '.swiper-pagination', clickable: true },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      breakpoints: {
+        640:  { slidesPerView: 2 },
+        1200: { slidesPerView: 3 }
+      }
+    });
+  </script>
   <script src="animations.js" defer></script>
 </body>
 </html>

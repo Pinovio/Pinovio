@@ -143,33 +143,57 @@
 
 .anim-ready {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.55s ease, transform 0.55s ease;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.anim-from-below {
+  transform: translateY(48px) scale(0.97);
+}
+
+.anim-from-above {
+  transform: translateY(-32px) scale(0.97);
 }
 
 .anim-ready.anim-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 /* Staggered grid children — JS sets --delay on each child */
 .anim-stagger > * {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: var(--delay, 0ms);
+}
+
+.anim-stagger.anim-from-below > * {
+  transform: translateY(36px) scale(0.97);
+}
+
+.anim-stagger.anim-from-above > * {
+  transform: translateY(-24px) scale(0.97);
 }
 
 .anim-stagger.anim-visible > * {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 /* Subtle article h2 rise */
 .anim-article-h2 {
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.anim-article-h2.anim-from-below {
+  transform: translateY(20px);
+}
+
+.anim-article-h2.anim-from-above {
+  transform: translateY(-14px);
 }
 
 .anim-article-h2.anim-visible {

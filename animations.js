@@ -164,7 +164,11 @@
     entries.forEach(function (entry) {
       if (entry.isIntersecting) {
         entry.target.classList.add('anim-visible');
-        observer.unobserve(entry.target);
+      } else {
+        entry.target.classList.remove('anim-visible');
+        var aboveViewport = entry.boundingClientRect.top < 0;
+        entry.target.classList.toggle('anim-from-above', aboveViewport);
+        entry.target.classList.toggle('anim-from-below', !aboveViewport);
       }
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
@@ -177,32 +181,32 @@
 
   // Section h2 headers — fade up + accent line
   document.querySelectorAll('.section h2').forEach(function (el) {
-    el.classList.add('anim-ready');
+    el.classList.add('anim-ready', 'anim-from-below');
     observe(el);
   });
 
   // Section intro paragraphs — fade up with slight delay
   document.querySelectorAll('.section-intro').forEach(function (el) {
-    el.classList.add('anim-ready');
+    el.classList.add('anim-ready', 'anim-from-below');
     el.style.transitionDelay = '80ms';
     observe(el);
   });
 
   // Stat bars — fade up, also triggers count-up
   document.querySelectorAll('.stat-bar').forEach(function (el) {
-    el.classList.add('anim-ready');
+    el.classList.add('anim-ready', 'anim-from-below');
     observe(el);
   });
 
   // Callout boxes — fade up
   document.querySelectorAll('.callout').forEach(function (el) {
-    el.classList.add('anim-ready');
+    el.classList.add('anim-ready', 'anim-from-below');
     observe(el);
   });
 
   // Article body h2s — subtle rise
   document.querySelectorAll('.article-body h2').forEach(function (el) {
-    el.classList.add('anim-article-h2');
+    el.classList.add('anim-article-h2', 'anim-from-below');
     observe(el);
   });
 
@@ -217,7 +221,7 @@
 
   staggerSelectors.forEach(function (cfg) {
     document.querySelectorAll(cfg.sel).forEach(function (grid) {
-      grid.classList.add('anim-stagger');
+      grid.classList.add('anim-stagger', 'anim-from-below');
       Array.from(grid.children).forEach(function (child, i) {
         child.style.setProperty('--delay', (i * cfg.delay) + 'ms');
       });

@@ -428,11 +428,12 @@ main {
 }
 
 .decision-card p {
-  margin: 0 0 14px;
+  margin: 0;
 }
 
 .decision-card .button {
   width: 100%;
+  margin-top: 28px;
 }
 
 .card h3 {

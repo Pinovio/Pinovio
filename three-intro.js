@@ -109,6 +109,42 @@
     window.removeEventListener('keydown', onKey)
   }
 
+  // ---------------------------------------------------------------
+  // Motion toggle — a small switch that pauses/resumes the wave
+  // ---------------------------------------------------------------
+  function createMotionToggle() {
+    if (document.getElementById('pinovio-motion-toggle')) return // already exists
+
+    const motionOff = localStorage.getItem('pinovio-motion') === 'off'
+
+    const wrap = document.createElement('div')
+    wrap.id = 'pinovio-motion-toggle'
+    if (motionOff) wrap.classList.add('is-off')
+
+    wrap.innerHTML = `
+      <button class="pinovio-motion-btn" aria-pressed="${!motionOff}" title="${motionOff ? 'Resume particles' : 'Pause particles'}">
+        <svg class="pinovio-motion-btn__icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <path d="M2 12c3-7 17-7 20 0-3 7-17 7-20 0z"/>
+          <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>
+        </svg>
+        <span class="pinovio-motion-btn__track">
+          <span class="pinovio-motion-btn__thumb"></span>
+        </span>
+      </button>
+    `
+
+    document.body.appendChild(wrap)
+
+    const btn = wrap.querySelector('.pinovio-motion-btn')
+    btn.addEventListener('click', () => {
+      const nowOff = wrap.classList.toggle('is-off')
+      if (scene) scene.setMotionPaused(nowOff)
+      localStorage.setItem('pinovio-motion', nowOff ? 'off' : 'on')
+      btn.setAttribute('aria-pressed', !nowOff)
+      btn.title = nowOff ? 'Resume particles' : 'Pause particles'
+    })
+  }
+
   function handoffToBackground() {
     sessionStorage.setItem('pinovio-intro-shown', 'true')
     if (container) {
@@ -117,6 +153,7 @@
     // Keep body.pinovio-intro-active so content stays hidden until scroll.
     showScrollCue()
     addRevealListeners()
+    createMotionToggle()
   }
 
   function init() {
@@ -139,8 +176,31 @@
     })
     scene.start()
 
-    window.addEventListener('beforeunload', () => {
-      if (scene) scene.destroy()
+    // Apply saved motion preference immediately
+    const savedMotion = localStorage.getItem('pinovio-motion')
+    if (savedMotion === 'off' && scene) scene.setMotionPaused(true)
+
+    // For non-intro pages, show the motion toggle right away
+    if (!doIntro) createMotionToggle()
+
+    // Fix: use pagehide instead of beforeunload so bfcache (back/forward
+    // cache) works. With beforeunload, Safari calls destroy() and removes the
+    // Three.js canvas, so pressing Back shows a blank background.
+    window.addEventListener('pagehide', (e) => {
+      // e.persisted = true → page is being stored in bfcache; keep scene alive
+      if (!e.persisted && scene) {
+        scene.destroy()
+        scene = null
+      }
+    })
+
+    // When restored from bfcache (back/forward button), restart the rAF loop
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted && scene && scene.renderer) {
+        cancelAnimationFrame(scene.animationId)
+        if (scene.phase !== 'wave') scene.phaseStart = Date.now()
+        scene.animate()
+      }
     })
   }
 

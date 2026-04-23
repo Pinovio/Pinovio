@@ -62,6 +62,9 @@
       this.animationId = null
       this.resizeHandler = null
       this.scrollHandler = null
+
+      // Motion pause state (toggled by the UI switch)
+      this.motionPaused = false
     }
 
     // ---------------------------------------------------------
@@ -330,14 +333,30 @@
         // Ease in-out cubic
         const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2
 
-        for (let i = 0; i < this.NUM; i++) {
-          const home = this.waveHome[i]
-          this.positions[i * 3]     = this.morphStartPositions[i * 3]     + (home.x - this.morphStartPositions[i * 3])     * e
-          this.positions[i * 3 + 1] = this.morphStartPositions[i * 3 + 1] + (home.y - this.morphStartPositions[i * 3 + 1]) * e
-          this.positions[i * 3 + 2] = this.morphStartPositions[i * 3 + 2] + (home.z - this.morphStartPositions[i * 3 + 2]) * e
-          // Scale transitions from INTRO_SCALE toward an average wave-scale value
-          const waveScaleAvg = 16
-          this.scales[i] = this.morphStartScales[i] + (waveScaleAvg - this.morphStartScales[i]) * e
+        // Advance the wave clock during the morph so by the time we hand off
+        // to the wave phase, particles are already oscillating — no "stop
+        // and start" pause between morph end and wave begin.
+        this.waveCount += 0.1 + this.scrollFactor * 0.25
+
+        let idx = 0
+        for (let ix = 0; ix < this.AMOUNTX; ix++) {
+          for (let iy = 0; iy < this.AMOUNTY; iy++) {
+            const home = this.waveHome[idx]
+            // Live wave target (where this particle would be in pure wave phase)
+            const waveY = Math.sin((ix + this.waveCount) * 0.3) * 50 +
+                          Math.sin((iy + this.waveCount) * 0.5) * 50
+            const waveScale = (Math.sin((ix + this.waveCount) * 0.3) + 1) * 8 +
+                              (Math.sin((iy + this.waveCount) * 0.5) + 1) * 8
+
+            // Lerp from frozen text snapshot → live wave position.
+            // Because waveY/waveScale advance every frame, the particles flow
+            // straight into wave motion instead of pausing at y=0 first.
+            this.positions[idx * 3]     = this.morphStartPositions[idx * 3]     + (home.x - this.morphStartPositions[idx * 3])     * e
+            this.positions[idx * 3 + 1] = this.morphStartPositions[idx * 3 + 1] + (waveY  - this.morphStartPositions[idx * 3 + 1]) * e
+            this.positions[idx * 3 + 2] = this.morphStartPositions[idx * 3 + 2] + (home.z - this.morphStartPositions[idx * 3 + 2]) * e
+            this.scales[idx] = this.morphStartScales[idx] + (waveScale - this.morphStartScales[idx]) * e
+            idx++
+          }
         }
 
         // Camera lerp
@@ -355,30 +374,26 @@
       }
 
       else if (this.phase === 'wave') {
-        const elapsed = now - this.phaseStart
-        // Ease-out cubic: wave amplitude and ripple grow in over 1.2s so
-        // there is no jarring "pop" when the morph hands off to the wave.
-        const WAVE_EASE_MS = 1200
-        const wp = Math.min(elapsed / WAVE_EASE_MS, 1.0)
-        const waveBlend = 1 - Math.pow(1 - wp, 3) // ease-out cubic 0→1
-
-        let idx = 0
-        for (let ix = 0; ix < this.AMOUNTX; ix++) {
-          for (let iy = 0; iy < this.AMOUNTY; iy++) {
-            const home = this.waveHome[idx]
-            this.positions[idx * 3]     = home.x
-            this.positions[idx * 3 + 1] =
-              (Math.sin((ix + this.waveCount) * 0.3) * 50 +
-               Math.sin((iy + this.waveCount) * 0.5) * 50) * waveBlend
-            this.positions[idx * 3 + 2] = home.z
-            this.scales[idx] =
-              ((Math.sin((ix + this.waveCount) * 0.3) + 1) * 8 +
-               (Math.sin((iy + this.waveCount) * 0.5) + 1) * 8) * waveBlend +
-              this.INTRO_SCALE * (1 - waveBlend) // blend from intro dot size
-            idx++
+        if (!this.motionPaused) {
+          let idx = 0
+          for (let ix = 0; ix < this.AMOUNTX; ix++) {
+            for (let iy = 0; iy < this.AMOUNTY; iy++) {
+              const home = this.waveHome[idx]
+              this.positions[idx * 3]     = home.x
+              this.positions[idx * 3 + 1] =
+                Math.sin((ix + this.waveCount) * 0.3) * 50 +
+                Math.sin((iy + this.waveCount) * 0.5) * 50
+              this.positions[idx * 3 + 2] = home.z
+              this.scales[idx] =
+                (Math.sin((ix + this.waveCount) * 0.3) + 1) * 8 +
+                (Math.sin((iy + this.waveCount) * 0.5) + 1) * 8
+              idx++
+            }
           }
+          this.waveCount += 0.1 + this.scrollFactor * 0.25
         }
-        this.waveCount += 0.1 + this.scrollFactor * 0.25
+        // If motionPaused: skip position updates so particles stay frozen.
+        // We still fall through to render so the canvas stays visible.
       }
 
       this.particles.geometry.attributes.position.needsUpdate = true
@@ -388,9 +403,25 @@
       this.animationId = requestAnimationFrame(() => this.animate())
     }
 
+    // Toggle particle motion on/off (called by the UI switch)
+    setMotionPaused(paused) {
+      this.motionPaused = paused
+      // When resuming, advance phaseStart by however long we were paused so
+      // the wave-ease-in doesn't restart from 0.
+      if (!paused && this.phase === 'wave') {
+        this.phaseStart = Date.now() - 9999 // skip straight past ease-in
+      }
+    }
+
     start() {
       if (!this.init()) return
-      this.animate()
+      // Fix: if the page loaded while hidden (e.g. Safari URL-bar preload),
+      // don't start the rAF loop yet. The visibilitychange handler will start
+      // it with a fresh phaseStart once the page becomes visible, so the
+      // "Welcome" word isn't missed.
+      if (document.visibilityState !== 'hidden') {
+        this.animate()
+      }
     }
 
     destroy() {

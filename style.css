@@ -67,6 +67,11 @@ input[type='reset'],
   cursor: pointer;
 }
 
+main {
+  position: relative;
+  z-index: 1;
+}
+
 .container {
   width: 100%;
   max-width: none;
@@ -78,6 +83,7 @@ input[type='reset'],
   position: sticky;
   top: 0;
   z-index: 12;
+  isolation: isolate;
   backdrop-filter: blur(14px);
   background: rgba(11, 18, 32, 0.82);
   border-bottom: 1px solid var(--line);
@@ -178,7 +184,7 @@ input[type='reset'],
   margin: 0 0 14px;
   font-family: 'Inter', 'Segoe UI', sans-serif;
   font-size: clamp(2.2rem, 4.8vw, 3.6rem);
-  line-height: 1.04;
+  line-height: 1.12;
   letter-spacing: -0.04em;
 }
 
@@ -778,13 +784,21 @@ input[type='reset'],
 @media (max-width: 760px) {
   .nav-row {
     min-height: auto;
-    padding: 16px 0;
+    padding: 12px 0;
     flex-direction: column;
     align-items: flex-start;
+    gap: 8px;
   }
 
   .site-nav {
     justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 2px 0;
+  }
+
+  .site-nav a {
+    padding: 7px 11px;
+    font-size: 0.84rem;
   }
 
   .hero-copy,

@@ -3,23 +3,293 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>For Businesses | Pinovio</title>
-  <meta name="description" content="Pinovio provides AI setup services for businesses, including chatbot deployment, workflow automation systems, and productivity stack implementation.">
+  <title>Services &amp; Pricing | Pinovio</title>
+  <meta name="description" content="Four packages: Simple Website ($2,999), Advanced Website ($5,999), AI Chatbot ($800), and Website Improvement (custom quote). Optional monthly retainer. Delivered in 2–4 weeks.">
   <link rel="stylesheet" href="style.css?v=20260309">
   <link rel="icon" href="assets/pinovio-logo-header.png" type="image/png">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="For Businesses | Pinovio AI Setup Services">
-  <meta property="og:description" content="Pinovio provides AI setup services for businesses, including chatbot deployment, workflow automation systems, and productivity stack implementation.">
+  <meta property="og:title" content="Services &amp; Pricing | Pinovio">
+  <meta property="og:description" content="Modern websites with AI sales assistants. Three packages from $2,999.">
   <meta property="og:url" content="https://www.pinovio.com/for-businesses.html">
   <meta property="og:image" content="https://www.pinovio.com/assets/pinovio-logo-header.png">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="For Businesses | Pinovio AI Setup Services">
-  <meta name="twitter:description" content="AI chatbot setup, workflow automation, and team AI systems. Services opening summer 2026.">
+  <meta name="twitter:title" content="Services &amp; Pricing | Pinovio">
+  <meta name="twitter:description" content="Modern websites with AI sales assistants. Three packages from $2,999.">
   <link rel="stylesheet" href="animations.css">
   <link rel="stylesheet" href="three-intro.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
   <script src="wave-background.js" defer></script>
   <script src="three-intro.js" defer></script>
+  <style>
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+    @media (max-width: 720px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+    }
+    .pricing-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(180deg, rgba(59,130,246,0.08), var(--surface) 65%);
+      box-shadow: var(--shadow-md);
+    }
+    .pricing-card .badge {
+      position: absolute;
+      top: -12px;
+      right: 24px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 999px;
+    }
+    .pricing-card h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+    .price-display {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin: 4px 0 8px;
+    }
+    .price-display .amount {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .price-display .period {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .price-retainer {
+      color: var(--accent-strong);
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0;
+    }
+    .pricing-card .who {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 12px;
+    }
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .feature-list li::before {
+      content: '✓';
+      color: var(--accent-strong);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .pricing-card .cta {
+      margin-top: auto;
+    }
+    .feature-list li.soon {
+      opacity: 0.45;
+    }
+    .feature-list li.soon::before {
+      content: '◷';
+      color: var(--muted);
+    }
+    .soon-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .retainer-note {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin: -10px 0 0 0;
+      line-height: 1.5;
+    }
+    .pricing-card .guarantee {
+      font-size: 13px;
+      color: var(--accent-strong);
+      background: rgba(59,130,246,0.08);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 4px 0 0 0;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .pricing-card .guarantee::before {
+      content: '✓';
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .addon-block {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      margin-top: 4px;
+    }
+    .addon-block .addon-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .addon-block .addon-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .addon-block .addon-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .addon-block .addon-price {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .retainer-block {
+      background: rgba(59, 130, 246, 0.06);
+      border: 1px solid rgba(59, 130, 246, 0.18);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 4px 0 8px;
+    }
+    .retainer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .retainer-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+    }
+    .retainer-price {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .retainer-desc {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.5;
+      display: block;
+    }
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-width: 820px;
+      margin: 32px auto 0;
+    }
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 22px 26px;
+    }
+    .faq-item h4 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      color: var(--text);
+    }
+    .faq-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 32px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    .compare-table th,
+    .compare-table td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+    .compare-table th {
+      background: var(--surface-alt);
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .compare-table td:first-child {
+      color: var(--muted);
+    }
+    .compare-table td.yes {
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+    .compare-table td.no {
+      color: rgba(148, 163, 184, 0.5);
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    @media (max-width: 720px) {
+      .compare-table { font-size: 13px; }
+      .compare-table th, .compare-table td { padding: 10px 12px; }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -30,9 +300,9 @@
       </a>
       <nav class="site-nav" aria-label="Primary">
         <a href="index.html">Home</a>
+        <a href="for-businesses.html" aria-current="page">Services</a>
         <a href="accessories.html">AI Tools</a>
         <a href="insights.html">Insights</a>
-        <a href="for-businesses.html" aria-current="page">For Businesses</a>
         <a href="about.html">About</a>
       </nav>
     </div>
@@ -42,11 +312,282 @@
     <section class="hero hero-compact">
       <div class="container hero-layout">
         <div class="hero-copy">
-          <p class="eyebrow">AI Setup Services</p>
-          <h1>AI Systems Built for Business Operations</h1>
-          <p>Pinovio&rsquo;s AI setup services will be available in summer 2026. We help teams deploy AI chatbots, workflow automation, and internal systems that reduce repetitive work and improve response speed.</p>
+          <p class="eyebrow">Services &amp; Pricing</p>
+          <h1>Honest pricing. No surprises.</h1>
+          <p>Four options — new website, AI chatbot, or improve what you already have. One upfront cost. Optional monthly retainer for hosting, updates, and support. No hidden fees, no scope creep.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="contact.html">Request a Consultation</a>
+            <a class="button button-primary" href="#packages">See the packages</a>
+            <a class="button button-secondary" href="contact.html">Just have a question?</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="packages">
+      <div class="container">
+        <h2>Choose your package.</h2>
+        <p class="section-intro">Not sure which one fits? Start with Simple. Add the chatbot when you're ready. Or just tell us what you already have and we'll go from there.</p>
+
+        <div class="pricing-grid">
+
+          <!-- SIMPLE WEBSITE -->
+          <article class="pricing-card" id="starter">
+            <p class="eyebrow">Simple Website</p>
+            <h3>Get online, done properly.</h3>
+            <div class="price-display">
+              <span class="amount">$2,999</span>
+              <span class="period">one-time</span>
+            </div>
+            <div class="retainer-block">
+              <div class="retainer-row">
+                <span class="retainer-label">Optional Retainer</span>
+                <span class="retainer-price">$99/mo</span>
+              </div>
+              <span class="retainer-desc">Hosting, updates, fixes, and support. Most clients keep it. Cancel anytime — you own the site either way.</span>
+            </div>
+            <p class="who">Good fit if you need a clean, professional site up fast — no fluff, no bloat, just something that works.</p>
+            <ul class="feature-list">
+              <li>Clean, professional custom site</li>
+              <li>Mobile-responsive design</li>
+              <li>Basic SEO setup</li>
+              <li>Google Analytics installed</li>
+              <li>Simple contact form</li>
+              <li>2–3 week delivery</li>
+            </ul>
+            <div class="addon-block">
+              <span class="addon-label">Optional Add-On</span>
+              <div class="addon-row">
+                <span class="addon-desc">AI Chatbot — FAQ + lead capture, trained on your site</span>
+                <span class="addon-price">+$800 · $99/mo</span>
+              </div>
+            </div>
+            <a class="button button-secondary cta" href="contact.html?package=simple">Start here</a>
+          </article>
+
+          <!-- ADVANCED WEBSITE -->
+          <article class="pricing-card featured" id="growth">
+            <span class="badge">Most Popular</span>
+            <p class="eyebrow">Advanced Website</p>
+            <h3>Built to impress and convert.</h3>
+            <div class="price-display">
+              <span class="amount">$5,999</span>
+              <span class="period">one-time</span>
+            </div>
+            <div class="retainer-block">
+              <div class="retainer-row">
+                <span class="retainer-label">Optional Retainer</span>
+                <span class="retainer-price">$199/mo</span>
+              </div>
+              <span class="retainer-desc">Hosting, updates, fixes, and direct email support. Most clients keep it. Cancel anytime — you own the site either way.</span>
+            </div>
+            <p class="who">Good fit if you want something custom — animations, premium design, and a site that actually makes people stay.</p>
+            <ul class="feature-list">
+              <li>Custom site with animations</li>
+              <li>Premium design + consistent visual styling</li>
+              <li>Advanced SEO + schema markup</li>
+              <li>Speed &amp; performance optimization</li>
+              <li>Google Analytics + lead tracking</li>
+              <li>Custom contact forms with notifications</li>
+              <li>Priority email support</li>
+              <li>3–4 week delivery</li>
+            </ul>
+            <div class="addon-block">
+              <span class="addon-label">Optional Add-On</span>
+              <div class="addon-row">
+                <span class="addon-desc">AI Chatbot — lead qualification + FAQ, trained on your site</span>
+                <span class="addon-price">+$800 · $99/mo</span>
+              </div>
+            </div>
+            <a class="button button-primary cta" href="contact.html?package=advanced">Talk to us first</a>
+          </article>
+
+          <!-- AI CHATBOT -->
+          <article class="pricing-card" id="chatbot">
+            <p class="eyebrow">AI Chatbot</p>
+            <h3>Already have a site? Add the AI.</h3>
+            <div class="price-display">
+              <span class="amount">$800</span>
+              <span class="period">one-time</span>
+            </div>
+            <div class="retainer-block">
+              <div class="retainer-row">
+                <span class="retainer-label">Optional Retainer</span>
+                <span class="retainer-price">$99/mo</span>
+              </div>
+              <span class="retainer-desc">Monthly retraining as your business changes + bug fixes. Most clients keep it so the bot stays accurate. Cancel anytime.</span>
+            </div>
+            <p class="who">Good fit if your site is already live — you just want an AI answering questions and capturing leads while you're away.</p>
+            <ul class="feature-list">
+              <li>Trained on your website + docs</li>
+              <li>FAQ answering + lead capture</li>
+              <li>Works on any existing site</li>
+              <li>2–3 day setup</li>
+              <li>Monthly retraining included</li>
+            </ul>
+            <p class="guarantee">Tuned until it sounds like you — no robotic replies.</p>
+            <a class="button button-secondary cta" href="contact.html?package=chatbot">Add it to my site</a>
+          </article>
+
+          <!-- WEBSITE IMPROVEMENT -->
+          <article class="pricing-card" id="improvement">
+            <p class="eyebrow">Website Improvement</p>
+            <h3>You have a site. Let's make it better.</h3>
+            <div class="price-display">
+              <span class="amount">Let's Talk</span>
+            </div>
+            <p class="price-retainer">Priced per scope</p>
+            <p class="who">Good fit if your site exists but looks outdated, loads slow, or just isn't converting. We'll quote what it actually needs.</p>
+            <ul class="feature-list">
+              <li>Redesign or visual refresh</li>
+              <li>Animations + UX improvements</li>
+              <li>Speed + SEO audit</li>
+              <li>Mobile fixes</li>
+              <li>No full rebuild required</li>
+            </ul>
+            <p class="guarantee">Free quote — we'll only recommend what your site actually needs.</p>
+            <a class="button button-secondary cta" href="contact.html?package=improvement">Get a quote</a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted">
+      <div class="container">
+        <h2>Simple vs Advanced</h2>
+        <p class="section-intro">Not sure which website package fits? Here's the side-by-side.</p>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Simple Website</th>
+              <th>Advanced Website</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Design complexity</td>
+              <td>Clean, standard layout</td>
+              <td class="yes">Custom, premium design</td>
+            </tr>
+            <tr>
+              <td>Animations</td>
+              <td>Basic</td>
+              <td class="yes">Advanced</td>
+            </tr>
+            <tr>
+              <td>Google Analytics</td>
+              <td class="yes">Included</td>
+              <td class="yes">Included</td>
+            </tr>
+            <tr>
+              <td>Contact form</td>
+              <td>Basic</td>
+              <td class="yes">Custom</td>
+            </tr>
+            <tr>
+              <td>Premium branding</td>
+              <td class="no">—</td>
+              <td class="yes">Included</td>
+            </tr>
+            <tr>
+              <td>AI Chatbot</td>
+              <td class="no">Add-on (+$800)</td>
+              <td class="no">Add-on (+$800)</td>
+            </tr>
+            <tr>
+              <td>SEO</td>
+              <td>Basic setup</td>
+              <td class="yes">Advanced + schema markup</td>
+            </tr>
+            <tr>
+              <td>Speed &amp; performance optimization</td>
+              <td class="no">—</td>
+              <td class="yes">Included</td>
+            </tr>
+            <tr>
+              <td>Analytics + lead tracking</td>
+              <td class="no">—</td>
+              <td class="yes">Included</td>
+            </tr>
+            <tr>
+              <td>Custom contact forms</td>
+              <td class="no">—</td>
+              <td class="yes">Included</td>
+            </tr>
+            <tr>
+              <td>Email support</td>
+              <td>Standard</td>
+              <td class="yes">Priority</td>
+            </tr>
+            <tr>
+              <td>Delivery</td>
+              <td>2–3 weeks</td>
+              <td>3–4 weeks</td>
+            </tr>
+            <tr>
+              <td>Price</td>
+              <td>$2,999 + $199/mo</td>
+              <td>$5,999 + $399/mo</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>Why add an AI chatbot at all?</h2>
+        <p class="section-intro">A website without an AI is just a page people read and leave. The chatbot is what makes it actually do something.</p>
+        <div class="grid grid-3">
+          <article class="card">
+            <h3>Your site works when you don't</h3>
+            <p>Late-night visitors, weekend browsers, people in different time zones — the AI handles their questions without you being awake for it.</p>
+          </article>
+          <article class="card">
+            <h3>Fewer wasted conversations</h3>
+            <p>The AI qualifies enquiries before they reach you. By the time someone lands in your inbox, they already know your pricing and what you do.</p>
+          </article>
+          <article class="card">
+            <h3>Trust before the first call</h3>
+            <p>A site that answers questions instantly signals that you're responsive and professional. That impression forms before you've said a word.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted">
+      <div class="container">
+        <h2>Questions people usually ask.</h2>
+        <p class="section-intro">Straight answers. No sales spin.</p>
+        <div class="faq-list">
+          <div class="faq-item">
+            <h4>Do I own the website when it's done?</h4>
+            <p>Yes. The domain, hosting account, code, and chatbot config are yours. If you ever stop the retainer, none of that goes away — you just handle it yourself from that point.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Is the monthly retainer required?</h4>
+            <p>No. The retainer is optional and you can cancel anytime — you own the site either way. It covers hosting, security updates, content edits, chatbot retraining when your business changes, and direct access when something needs fixing. Most clients keep it because hosting has to live somewhere and they don't want to deal with it themselves.</p>
+          </div>
+          <div class="faq-item">
+            <h4>I already have a website. Can you just add the AI?</h4>
+            <p>Yes. We can deploy the chatbot onto almost any existing site without rebuilding it. If you want a redesign too, we'll quote both options so you can decide.</p>
+          </div>
+          <div class="faq-item">
+            <h4>How does the AI know what to say?</h4>
+            <p>We feed it your website, FAQs, and any docs you share. It only answers what you've told it. If a question falls outside that, it says it doesn't know and offers to connect the visitor to you — rather than guessing.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Can I cancel the retainer?</h4>
+            <p>Anytime. Month-to-month, no contract. Your site and chatbot stay yours — the retainer just stops at the end of the billing period.</p>
+          </div>
+          <div class="faq-item">
+            <h4>What if I need something outside the package?</h4>
+            <p>Ask us. We'll tell you whether it fits in your current package, belongs in Growth, or needs a separate quote. We won't upsell you on things you don't need.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Is "2–4 weeks" realistic?</h4>
+            <p>Yes, once we have your content and you've signed off on the first design direction. The main thing that slows projects down is waiting on feedback from clients — not the build itself. We move at your pace.</p>
           </div>
         </div>
       </div>
@@ -54,21 +595,14 @@
 
     <section class="section">
       <div class="container">
-        <h2>Services</h2>
-        <p>These services are scheduled to open in summer 2026.</p>
-        <div class="grid grid-3">
-          <article class="card">
-            <h3>AI Chatbot Setup</h3>
-            <p>Website and support bots for lead capture, qualification, and faster customer replies.</p>
-          </article>
-          <article class="card">
-            <h3>Workflow Automation</h3>
-            <p>Automations that connect your CRM, project tools, support stack, and internal communication.</p>
-          </article>
-          <article class="card">
-            <h3>Team AI Systems</h3>
-            <p>Practical internal workflows, prompt systems, and operating setups built around your team’s bottlenecks.</p>
-          </article>
+        <div class="card" style="text-align:center; padding: 56px 32px;">
+          <p class="eyebrow">Not sure yet?</p>
+          <h2 style="margin-top: 8px;">15 minutes. We'll tell you if we're the right fit.</h2>
+          <p style="max-width: 600px; margin: 16px auto 28px; color: var(--muted);">No pitch. Bring your questions and tell us what you're working on. If a different approach would serve you better, we'll say so.</p>
+          <div class="hero-actions" style="justify-content:center;">
+            <a class="button button-primary" href="contact.html">Get in touch</a>
+            <a class="button button-secondary" href="index.html">Back to home</a>
+          </div>
         </div>
       </div>
     </section>
@@ -76,11 +610,12 @@
 
   <footer class="site-footer">
     <div class="container footer-row">
-      <p>Need deployment support? Pinovio&rsquo;s AI setup and workflow automation services will be available in summer 2026.</p>
+      <p>© 2026 Pinovio. AI-powered websites and sales assistants for modern businesses.</p>
       <div class="footer-links">
-        <a href="index.html#join-updates">Get Updated</a>
+        <a href="for-businesses.html">Services</a>
         <a href="contact.html">Contact</a>
         <a href="about.html">About</a>
+        <a href="index.html#join-updates">Updates</a>
       </div>
     </div>
   </footer>

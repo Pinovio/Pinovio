@@ -336,7 +336,7 @@
         // Advance the wave clock during the morph so by the time we hand off
         // to the wave phase, particles are already oscillating — no "stop
         // and start" pause between morph end and wave begin.
-        this.waveCount += 0.1 + this.scrollFactor * 0.25
+        this.waveCount += 0.05 + this.scrollFactor * 0.15
 
         let idx = 0
         for (let ix = 0; ix < this.AMOUNTX; ix++) {
@@ -390,7 +390,7 @@
               idx++
             }
           }
-          this.waveCount += 0.1 + this.scrollFactor * 0.25
+          this.waveCount += 0.05 + this.scrollFactor * 0.15
         }
         // If motionPaused: skip position updates so particles stay frozen.
         // We still fall through to render so the canvas stays visible.
